@@ -14,15 +14,15 @@ const HINTS = [
 export function HurdleSection() {
   const [tab, setTab] = useState<"link" | "qr">("link");
   useEffect(() => {
-    const pick = () => { if (location.hash === "#qr") { setTab("qr"); document.getElementById("hurdle")?.scrollIntoView(); } };
+    const pick = () => { if (location.hash === "#qr") { setTab("qr"); document.getElementById("unmask")?.scrollIntoView(); } };
     pick(); addEventListener("hashchange", pick);
     return () => removeEventListener("hashchange", pick);
   }, []);
   return (
-    <section id="hurdle" className="relative mx-auto max-w-7xl scroll-mt-24 px-4 py-28 sm:px-6">
+    <section id="unmask" className="relative mx-auto max-w-7xl scroll-mt-24 px-4 py-28 sm:px-6">
       <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-end">
         <div>
-          <p className="fig">The hurdle we were set</p>
+          <p className="fig">Unmask: the hurdle we were set</p>
           <h2 className="mt-3 text-5xl sm:text-6xl">Redirects, cloaking and QR codes.</h2>
         </div>
         <p className="text-lg text-ink-soft">

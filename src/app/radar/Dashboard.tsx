@@ -82,13 +82,14 @@ export function Dashboard() {
   const [data, setData] = useState<{ summary: RadarSummary; recent: RadarReport[] } | null>(null);
   const [updated, setUpdated] = useState<Date | null>(null);
   const [error, setError] = useState(false);
+  const [offline, setOffline] = useState(false);
 
   useEffect(() => {
     let alive = true;
     const load = () =>
       fetch("/api/radar").then((r) => (r.ok ? r.json() : Promise.reject())).then((j) => {
         if (!alive) return;
-        setData(j); setUpdated(new Date()); setError(false);
+        setData(j); setUpdated(new Date()); setError(false); setOffline(!!j.offline);
       }).catch(() => alive && setError(true));
     load();
     const id = setInterval(() => { if (document.visibilityState === "visible") load(); }, 30000);
@@ -125,8 +126,9 @@ export function Dashboard() {
             <span className="live-dot absolute inline-flex h-full w-full rounded-full bg-red opacity-75" />
             <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red" />
           </span>
-          Live from the database
+          {offline ? "Saved snapshot" : "Live from the database"}
         </span>
+        {offline && <span className="text-amber">The live database is unreachable right now, so this shows the last saved snapshot.</span>}
         {updated && <span className="font-mono">updated {updated.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" })} · refreshes every 30 s</span>}
         {s.seeded > 0 && <span>Includes {s.seeded} sample reports added for the demo, marked “sample”.</span>}
       </div>

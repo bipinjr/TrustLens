@@ -37,7 +37,7 @@ export async function POST(req: Request) {
         reasoning_effort: "low",
         response_format: { type: "json_object" },
         messages: [
-          { role: "system", content: SYSTEM.replace("{LANG}", language) },
+          { role: "system", content: SYSTEM.replace("{LANG}", language === "Hinglish" ? "Hinglish (Hindi written in English letters, the way people text)" : language) },
           { role: "user", content: `Write one practice message with ${principles.length} tricks using these principles: ${principles.join(", ")}. Pick a fresh scenario.` },
         ],
       });

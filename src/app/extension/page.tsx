@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { FeaturePage } from "@/components/FeaturePage";
+import { GetTrustLens } from "@/components/GetTrustLens";
 
 export const metadata: Metadata = { title: "Browser extension" };
 
@@ -9,38 +10,13 @@ const CIA = [
   { k: "A", t: "Availability", d: "Lives in the browser: no install, no admin rights, works on any laptop and keeps guarding offline with built-in rules." },
 ];
 
-function Install() {
-  return (
-    <div>
-      <p className="fig">Install in 30 seconds</p>
-      <ol className="mt-5 grid gap-4">
-        {[
-          ["Open", "chrome://extensions and switch on Developer mode"],
-          ["Load", "Click Load unpacked and pick the extension folder"],
-          ["Pin", "Pin TrustLens. The shield turns mint: you're protected"],
-        ].map(([t, d], i) => (
-          <li key={t} className="rise flex gap-4 rounded-2xl border hairline bg-white/[0.02] p-4" style={{ ["--i" as string]: i }}>
-            <span className="font-display text-3xl italic text-teal">{i + 1}</span>
-            <span><b className="block">{t}</b><span className="text-sm text-ink-soft">{d}</span></span>
-          </li>
-        ))}
-      </ol>
-      <div className="mt-6 rounded-2xl border border-red/30 bg-red/[0.06] p-4">
-        <p className="fig !text-red">Try it</p>
-        <p className="mt-1 text-sm text-ink-soft">With the guard on, open <code className="font-mono text-red">http://paypa1-secure-login.com</code>. TrustLens stops it and takes you back to safety.</p>
-      </div>
-      <p className="mt-6 text-sm text-ink-soft">Works on Chrome, Edge, Brave and Opera. On phones: Firefox for Android, or add this site to your home screen.</p>
-    </div>
-  );
-}
-
 export default function ExtensionPage() {
   return (
     <FeaturePage current="/extension" n="04" fig="Browser extension"
       title={<>Always on. <em>Always there.</em></>}
       lead="TrustLens runs as a browser extension, so protection is available wherever you browse, with nothing to install on the computer. It watches every tab and blocks dangerous pages before they load."
       cia="Availability" ciaNote="No desktop app, no admin rights. On any machine in seconds."
-      tool={<Install />}
+      tool={<GetTrustLens />}
       steps={[
         { t: "Background guard", d: "Every host on the live OpenPhish feed becomes a blocking rule, refreshed every 30 minutes." },
         { t: "Warn & return", d: "A full-page warning names every reason, with one tap back to safety." },

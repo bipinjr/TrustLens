@@ -6,6 +6,7 @@ import { Confetti } from "./fx";
 const SPEECH_LANG: Record<string, string> = {
   English: "en-IN", Hindi: "hi-IN", Tamil: "ta-IN", Telugu: "te-IN", Bengali: "bn-IN",
   Marathi: "mr-IN", Kannada: "kn-IN", Malayalam: "ml-IN", Gujarati: "gu-IN",
+  Hinglish: "hi-IN", Punjabi: "pa-IN", Odia: "or-IN", Urdu: "ur-IN", Assamese: "as-IN",
 };
 
 export const VERDICT = {

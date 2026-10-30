@@ -68,7 +68,7 @@ export function Tilt({ children, max = 10, className = "" }: { children: React.R
   );
 }
 
-const GLYPHS = "ABCDEFGHJKLMNPQRSTUVWXYZ#%&@$₹?!कखगघजतपमरस0123456789";
+const GLYPHS = "abcdefghiklmnoprstuvwxyz"; // same face as the headline, so mid-scramble frames never fall back to another font
 
 // Letters scramble through glyphs and lock into place, left to right. Final text is server-rendered,
 // screen readers get it via aria-label, and nothing animates under reduced motion.

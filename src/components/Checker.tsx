@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState, type CSSProperties, useEffect } from "react";
-import { LANGUAGES, type Analysis, type Tactic } from "@/lib/shared";
+import { LANGUAGES, LANGUAGE_NATIVE, OCR_LANG, type Analysis, type Tactic } from "@/lib/shared";
 import { SAMPLES } from "@/lib/samples";
 import { findMatches } from "@/lib/signals";
 import { Result } from "./Result";
@@ -113,7 +113,7 @@ export function Checker({ children }: { children?: React.ReactNode }) {
       // Loaded on demand from a CDN so the main page stays light; runs fully in the browser.
       const url = "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.esm.min.js";
       const Tesseract = (await import(/* webpackIgnore: true */ url)).default;
-      const { data } = await Tesseract.recognize(file, "eng+hin");
+      const { data } = await Tesseract.recognize(file, ["eng", "hin", OCR_LANG[language]].filter(Boolean).join("+"));
       const extracted = String(data.text || "").replace(/\n{3,}/g, "\n\n").trim();
       if (extracted.length < 5) throw new Error("No readable text found in that image. Try a sharper screenshot.");
       setText(extracted);
@@ -284,7 +284,7 @@ export function Checker({ children }: { children?: React.ReactNode }) {
           <div className="mt-4 flex items-center justify-center gap-2">
             <label htmlFor="lang" className="text-sm text-ink-soft">Explain in</label>
             <select id="lang" value={language} onChange={(e) => setLanguage(e.target.value)} className="rounded-xl border border-white/12 bg-sheet px-3 py-1.5 font-semibold text-ink">
-              {LANGUAGES.map((l) => <option key={l}>{l}</option>)}
+              {LANGUAGES.map((l) => <option key={l} value={l}>{LANGUAGE_NATIVE[l] ?? l}</option>)}
             </select>
           </div>
         </div>

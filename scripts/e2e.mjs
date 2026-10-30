@@ -4,12 +4,16 @@ let fails = 0;
 const ok = (name, cond, extra = "") => { console.log(`${cond ? "PASS" : "FAIL"}  ${name}${extra ? `  (${extra})` : ""}`); if (!cond) fails++; };
 const post = async (path, body) => { const r = await fetch(BASE + path, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }); return { status: r.status, j: await r.json().catch(() => ({})) }; };
 
-for (const p of ["/", "/hurdle", "/check", "/phishing", "/malware", "/signature", "/extension", "/radar", "/learn", "/research", "/icon.svg", "/vendor/jsQR.js", "/share", "/sw.js", "/icons/icon-512.png"]) {
+for (const p of ["/", "/check", "/phishing", "/malware", "/signature", "/extension", "/radar", "/learn", "/research", "/icon.svg", "/vendor/jsQR.js", "/share", "/sw.js", "/icons/icon-512.png", "/downloads/trustlens-chrome.zip", "/downloads/trustlens-firefox.zip"]) {
   const r = await fetch(BASE + p);
   ok(`GET ${p}`, r.status === 200, String(r.status));
 }
 const man = await (await fetch(BASE + "/manifest.webmanifest")).json().catch(() => ({}));
 ok("PWA manifest has share target", man.share_target?.action === "/share-target" && man.icons?.length === 3, man.name);
+{ const fd = new FormData(); fd.set("text", "see http://localhost:3000/lab/go");
+  const r = await fetch(BASE + "/share-target", { method: "POST", body: fd, redirect: "manual" });
+  const body = await r.text();
+  ok("share target (no service worker) hands the link to /share, not via the URL", r.status === 200 && body.includes("trustlens-share") && body.includes("lab/go") && body.includes("/share?shared=2"), r.status); }
 ok("GET /nope is 404", (await fetch(BASE + "/nope")).status === 404);
 
 let r = await post("/api/link-check", { url: "https://sbi-kyc-update.top/verify" });
@@ -34,6 +38,12 @@ ok("unmask rejects empty", r.status === 400);
 
 r = await post("/api/analyze", { text: "Dear customer your SBI account will be blocked today. Update KYC at sbi-kyc-update.top and share OTP", language: "English" });
 ok("analyze scam message", r.status === 200 && r.j.verdict === "scam", `${r.status} ${r.j.verdict ?? r.j.error}`);
+for (const [lang, script] of [["Tamil", /[஀-௿]/], ["Punjabi", /[਀-੿]/], ["Urdu", /[؀-ۿ]/]]) {
+  const q = await post("/api/analyze", { text: "Your electricity will be disconnected tonight. Pay Rs 1,250 now at bit.ly/eb-pay or call 9876543210", language: lang });
+  ok(`analyze explains in ${lang}`, q.status === 200 && script.test(q.j.summary || ""), (q.j.summary || q.j.error || "").slice(0, 60));
+}
+const radar = await (await fetch(BASE + "/api/radar")).json().catch(() => ({}));
+ok("radar data present" + (radar.offline ? " (snapshot: live DB unreachable)" : " (live)"), radar.summary?.total > 0, radar.summary?.total);
 r = await fetch(BASE + "/api/radar");
 ok("radar feed", r.status === 200);
 

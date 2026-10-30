@@ -4,7 +4,7 @@ import type { CSSProperties, ReactNode } from "react";
 export const FEATURES = [
   { href: "/phishing", n: "01", label: "Phishing", cia: "Confidentiality" },
   { href: "/malware", n: "02", label: "Malware", cia: "Integrity" },
-  { href: "/signature", n: "03", label: "Signatures", cia: "Integrity" },
+  { href: "/signature", n: "03", label: "Verify", cia: "Integrity" },
   { href: "/extension", n: "04", label: "Extension", cia: "Availability" },
 ] as const;
 

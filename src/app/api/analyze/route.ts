@@ -96,7 +96,7 @@ export async function POST(req: Request) {
         max_tokens: 1500,
         response_format: { type: "json_object" },
         messages: [
-          { role: "system", content: SYSTEM.replace("{LANG}", language) },
+          { role: "system", content: SYSTEM.replace("{LANG}", language === "Hinglish" ? "Hinglish (Hindi written in English letters, the way people text)" : language) },
           {
             role: "user",
             content: `Rule-engine evidence (deterministic, may include false positives):\n${evidence}\n\n<message>\n${text}\n</message>`,

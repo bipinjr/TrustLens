@@ -19,10 +19,10 @@ export function Footer() {
           <p className="font-semibold text-white">Product</p>
           <ul className="mt-3 space-y-2 text-ink-soft">
             <li><Link className="hover:text-white" href="/check">Check a message</Link></li>
-            <li><Link className="hover:text-white" href="/#hurdle">The Hurdle: redirects, cloaking & QR</Link></li>
+            <li><Link className="hover:text-white" href="/#unmask">Unmask: redirects, cloaking & QR</Link></li>
             <li><Link className="hover:text-white" href="/phishing">Phishing check</Link></li>
             <li><Link className="hover:text-white" href="/malware">Malware check</Link></li>
-            <li><Link className="hover:text-white" href="/signature">Signature verification</Link></li>
+            <li><Link className="hover:text-white" href="/signature">Verify a document</Link></li>
             <li><Link className="hover:text-white" href="/extension">Browser extension</Link></li>
             <li><Link className="hover:text-white" href="/radar">Scam Radar</Link></li>
             <li><Link className="hover:text-white" href="/learn">Learn &amp; practise</Link></li>

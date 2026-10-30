@@ -600,3 +600,7 @@ body { background: #050708; }
 }
 /* Sections sit on the aurora: flat page fills become transparent */
 .bg-paper { background-color: rgb(5 7 8 / .72) !important; }
+
+/* Nav "Protect" dropdown */
+.nav-menu { opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .2s, transform .3s cubic-bezier(.2, .8, .2, 1), visibility .2s; }
+.nav-menu.is-open { opacity: 1; visibility: visible; transform: none; }

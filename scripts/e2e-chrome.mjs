@@ -117,7 +117,7 @@ try {
     ok("signature: edited copy = tampered", await waitFor(t, `document.querySelector("[role=status]")?.innerText.includes("Don't trust this")`), await text(t, "[role=status]"));
   }
 
-  await go(t, BASE + "/#hurdle", 3500);
+  await go(t, BASE + "/#unmask", 3500);
   await click(t, byText("button", "demo: 3 hops"));
   ok("hurdle: demo lab -> two-faced page", await waitFor(t, `document.querySelector("[role=status]")?.innerText.includes("Two-faced page")`, 30000), await text(t, "[role=status]"));
   await shot(t, "tool_hurdle_unmask.png");
@@ -134,8 +134,9 @@ try {
 
   await go(t, BASE + "/share?text=" + encodeURIComponent("check this http://localhost:3000/lab/go now"), 3500);
   ok("phone app share: shared link auto-unmasked", await waitFor(t, `document.body.innerText.includes("Two-faced page")`, 30000), await text(t, "h1"));
-  await go(t, BASE + "/hurdle", 3000);
-  ok("/hurdle redirects to the inline section", (await ev(t, "location.pathname + location.hash")) === "/#hurdle", await ev(t, "location.href"));
+  await go(t, BASE + "/radar", 4000);
+  ok("radar renders data (live or snapshot)", await waitFor(t, `/Reports in the last 14 days/.test(document.body.innerText)`, 15000), await text(t, "main"));
+  ok("nav has Unmask, Protect, Scam Radar, Learn, Research", await ev(t, `["Unmask","Protect","Scam Radar","Learn","Research"].every((w) => document.querySelector("nav[aria-label=Main]").innerText.includes(w))`));
   await go(t, BASE + "/check", 3500);
   ok("check page renders the checker", await ev(t, `!!document.querySelector("textarea")`));
 
@@ -145,7 +146,7 @@ try {
   await sleep(5000);
 
   // C1. Same tab: safe page -> phishing link -> warning -> Go back = previous page
-  const a = await open(BASE + "/phishing");
+  const a = await open(BASE + "/learn");
   await sleep(2500);
   await go(a, "http://paypa1-secure-login.com/signin", 3000);
   const w1 = await urlOf(a);
@@ -154,7 +155,7 @@ try {
   ok("ext: warning lists reasons", (await text(a, "#reasons")).length > 10, await text(a, "#reasons"));
   await click(a, `document.querySelector("#back")`);
   await sleep(2500);
-  ok("ext: Go back returns to the previous page", (await urlOf(a)).startsWith(BASE + "/phishing"), await urlOf(a));
+  ok("ext: Go back returns to the previous page", (await urlOf(a)).startsWith(BASE + "/learn"), await urlOf(a));
 
   // C2. Link opens a new tab -> warning -> Go back closes it and returns to the opener
   // a real click on a target=_blank link, like a user opening a link from WhatsApp Web
