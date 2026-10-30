@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>TrustLens</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="top">
+    <img src="icons/48.png" alt="" width="28" height="28">
+    <div>
+      <h1>Trust<span>Lens</span></h1>
+      <p>Check before you trust</p>
+    </div>
+  </header>
+  <main>
+    <label for="msg">Paste a suspicious message</label>
+    <textarea id="msg" rows="5" placeholder="Dear customer, your account will be blocked today…"></textarea>
+    <button class="primary" id="check-msg">Check message</button>
+    <div id="result" aria-live="polite"></div>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>
