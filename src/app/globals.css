@@ -566,8 +566,37 @@ body > * { position: relative; z-index: 1; }
 
 .claim-stamp { text-transform: none; letter-spacing: 0; font: 500 .85rem var(--font-body), sans-serif; }
 .xr-hint, .xr-lens-label { text-transform: none; letter-spacing: 0; font: 500 .75rem var(--font-body), sans-serif; }
-@layer base { h1 em, h2 em, h3 em { color: inherit; } p, li { max-width: 72ch; } }
+@layer base { h1 em, h2 em, h3 em { color: inherit; } p { max-width: 72ch; } }
 
 /* Landing hero background: link traffic field (canvas) fading at the edges */
 .hero-field { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
   mask: radial-gradient(120% 90% at 60% 45%, #000 45%, transparent 85%); -webkit-mask: radial-gradient(120% 90% at 60% 45%, #000 45%, transparent 85%); }
+
+/* Home: hurdle brief toggle, pillar rows, closing panel */
+.hurdle-brief[open] .hurdle-plus { transform: rotate(45deg); }
+.hurdle-plus { transition: transform .35s cubic-bezier(.3, 1.45, .5, 1); }
+.pillar { transition: padding .4s cubic-bezier(.2, .8, .2, 1), background .3s; }
+.pillar:hover { padding-left: 1rem; background: linear-gradient(90deg, rgb(94 234 212 / .05), transparent 60%); }
+.closing { background: radial-gradient(700px 320px at 50% 0%, rgb(94 234 212 / .14), transparent 70%), linear-gradient(180deg, #0d1112, #0a0d0e); }
+
+/* =================== App backdrop: night aurora =================== */
+body { background: #050708; }
+.app-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  background: radial-gradient(1200px 700px at 70% -10%, #0b1b1d 0%, transparent 60%), radial-gradient(900px 600px at -10% 30%, #0a1222 0%, transparent 60%), linear-gradient(180deg, #06090a 0%, #050708 60%, #040506 100%); }
+.app-bg .aur { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .85; will-change: transform; }
+.app-bg .a1 { width: 70vmax; height: 34vmax; left: 30%; top: -14vmax; background: radial-gradient(closest-side, rgb(94 234 212 / .30), rgb(20 184 166 / .10) 60%, transparent); }
+.app-bg .a2 { width: 60vmax; height: 30vmax; left: -22%; top: 38%; background: radial-gradient(closest-side, rgb(56 120 220 / .20), rgb(30 64 175 / .08) 60%, transparent); }
+.app-bg .a3 { width: 50vmax; height: 26vmax; right: -18%; bottom: -10vmax; background: radial-gradient(closest-side, rgb(94 234 212 / .16), rgb(251 113 133 / .05) 70%, transparent); }
+.app-bg .dots { position: absolute; inset: 0; background-image: radial-gradient(rgb(255 255 255 / .045) 1px, transparent 1.3px); background-size: 28px 28px;
+  mask: radial-gradient(80% 60% at 50% 0%, #000 0%, transparent 75%); -webkit-mask: radial-gradient(80% 60% at 50% 0%, #000 0%, transparent 75%); }
+.app-bg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(130% 100% at 50% 40%, transparent 55%, rgb(0 0 0 / .55) 100%); }
+@media (prefers-reduced-motion: no-preference) {
+  .app-bg .a1 { animation: aur1 26s ease-in-out infinite alternate; }
+  .app-bg .a2 { animation: aur2 32s ease-in-out infinite alternate; }
+  .app-bg .a3 { animation: aur3 38s ease-in-out infinite alternate; }
+  @keyframes aur1 { to { transform: translate(-18vmax, 10vmax) rotate(12deg) scale(1.15); } }
+  @keyframes aur2 { to { transform: translate(20vmax, -8vmax) rotate(-10deg) scale(1.2); } }
+  @keyframes aur3 { to { transform: translate(-14vmax, -12vmax) rotate(8deg) scale(1.1); } }
+}
+/* Sections sit on the aurora: flat page fills become transparent */
+.bg-paper { background-color: rgb(5 7 8 / .72) !important; }

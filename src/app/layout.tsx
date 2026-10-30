@@ -22,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable} ${pen.variable}`}>
       <body className="min-h-dvh">
+        <div className="app-bg" aria-hidden><i className="aur a1" /><i className="aur a2" /><i className="aur a3" /><i className="dots" /></div>
         <MagneticButtons />
         <CursorGlow />
         <RegisterSW />

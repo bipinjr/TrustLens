@@ -76,14 +76,15 @@ async function checkSite() {
 }
 
 async function renderHome() {
-  const { enabled = true, blocked = 0, recent = [], feedSize } = await chrome.storage.local.get(["enabled", "blocked", "recent", "feedSize"]);
+  const { enabled = true, blocked = 0, recent = [], feedSize, feedError } = await chrome.storage.local.get(["enabled", "blocked", "recent", "feedSize", "feedError"]);
   $("#enabled").checked = enabled;
   document.body.classList.toggle("is-off", !enabled);
   $("#pill-text").textContent = enabled ? "Guarding" : "Paused";
   $("#state").textContent = enabled ? "You're protected" : "Protection is off";
   $("#state-sub").textContent = enabled ? "Dangerous links are blocked before they open." : "Links aren't being checked. Switch it back on.";
   countUp($("#stat-blocked"), blocked);
-  $("#stat-feed").textContent = feedSize ? feedSize.toLocaleString("en-IN") : "Loading…";
+  // No feed yet (offline / blocked network): the offline look-alike rules still protect, so say that instead of spinning forever.
+  $("#stat-feed").textContent = feedSize ? feedSize.toLocaleString("en-IN") : feedError ? "Offline" : "Loading…";
   $("#recent-wrap").hidden = !recent.length;
   $("#recent").innerHTML = recent.map((r) => {
     let h = r.url; try { h = new URL(r.url).hostname; } catch {}
@@ -323,3 +324,9 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
     if (t && !t.contains(e.relatedTarget)) ["--rx", "--ry", "--tx", "--ty"].forEach((v) => t.style.removeProperty(v));
   });
 }
+
+// Live-update the feed count when the background finishes (or fails) loading it.
+chrome.storage.onChanged.addListener((c) => {
+  if (c.feedSize?.newValue) $("#stat-feed").textContent = c.feedSize.newValue.toLocaleString("en-IN");
+  else if (c.feedError && $("#stat-feed").textContent === "Loading…") $("#stat-feed").textContent = "Offline";
+});

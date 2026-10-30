@@ -31,7 +31,7 @@ async function refreshFeed() {
     await chrome.declarativeNetRequest.updateDynamicRules({ removeRuleIds: old, addRules: rules });
     await chrome.storage.local.set({ feedSize: rules.length, feedAt: Date.now() });
   } catch {
-    // offline: keep previous rules
+    await chrome.storage.local.set({ feedError: Date.now() }); // offline: keep previous rules, popup says so
   }
 }
 

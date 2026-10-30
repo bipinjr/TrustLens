@@ -5,7 +5,7 @@ import { PRINCIPLE_IDS, type PrincipleId } from "./principles";
 
 // Tolerate copy-paste slips in hosting env settings: whitespace, wrapping quotes, trailing slash.
 const clean = (v = "") => v.trim().replace(/^["']|["']$/g, "").trim();
-const URL = clean(process.env.SUPABASE_URL).replace(/\/+$/, "");
+const URL = ((u) => (u && !/^https?:\/\//.test(u) ? `https://${u}` : u))(clean(process.env.SUPABASE_URL).replace(/\/+$/, ""));
 const KEY = clean(process.env.SUPABASE_KEY);
 const headers = { apikey: KEY, Authorization: `Bearer ${KEY}`, "content-type": "application/json" };
 

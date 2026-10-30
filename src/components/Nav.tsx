@@ -7,7 +7,7 @@ import { Logo } from "./Logo";
 
 const LINKS = [
   { href: "/check", label: "Check a message" },
-  { href: "/hurdle", label: "Hurdle" },
+  { href: "/#hurdle", label: "Hurdle" },
   { href: "/phishing", label: "Phishing" },
   { href: "/malware", label: "Malware" },
   { href: "/signature", label: "Signatures" },

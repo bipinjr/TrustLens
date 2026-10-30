@@ -57,7 +57,7 @@ try {
   await send("Browser.setDownloadBehavior", { behavior: "allow", downloadPath: DL });
 
   /* ---------- A. Every page, desktop + phone: loads, no JS errors, no sideways scroll ---------- */
-  const pages = ["/", "/share", "/hurdle", "/check", "/phishing", "/malware", "/signature", "/extension", "/radar", "/learn", "/research"];
+  const pages = ["/", "/share", "/check", "/phishing", "/malware", "/signature", "/extension", "/radar", "/learn", "/research"];
   const t = await open("about:blank");
   for (const mobile of [false, true]) {
     await viewport(t, mobile);
@@ -117,23 +117,25 @@ try {
     ok("signature: edited copy = tampered", await waitFor(t, `document.querySelector("[role=status]")?.innerText.includes("Don't trust this")`), await text(t, "[role=status]"));
   }
 
-  await go(t, BASE + "/hurdle", 3500);
+  await go(t, BASE + "/#hurdle", 3500);
   await click(t, byText("button", "demo: 3 hops"));
   ok("hurdle: demo lab -> two-faced page", await waitFor(t, `document.querySelector("[role=status]")?.innerText.includes("Two-faced page")`, 30000), await text(t, "[role=status]"));
   await shot(t, "tool_hurdle_unmask.png");
   const qrInput = "#qr input[type=file]";
   for (const [file, want] of [["qr-upi-refund-scam.png", "QR payment scam"], ["qr-upi-refund-scam-small.png", "QR payment scam"], ["qr-shop-upi.png", "This QR takes money"], ["qr-link-short.png", "QR opens"]]) {
-    await go(t, BASE + "/hurdle#qr", 3500);
+    await go(t, BASE + "/#qr", 3500);
     await setFiles(t, qrInput, [`${DEMO}/${file}`]);
-    ok(`hurdle QR: ${file}`, await waitFor(t, `document.querySelector("#qr")?.innerText.includes(${JSON.stringify(want)})`, 15000), (await text(t, "#qr .card")).slice(-120));
+    ok(`hurdle QR: ${file}`, await waitFor(t, `document.querySelector("#qr")?.innerText.includes(${JSON.stringify(want)})`, 15000), (await text(t, "#qr")).slice(-120));
   }
   await shot(t, "tool_hurdle_qr.png");
-  await go(t, BASE + "/hurdle#qr", 3000);
+  await go(t, BASE + "/#qr", 3000);
   await click(t, byText("button", "Try a scam QR"));
   ok("hurdle QR: sample button", await waitFor(t, `document.querySelector("#qr")?.innerText.includes("QR payment scam")`), "");
 
   await go(t, BASE + "/share?text=" + encodeURIComponent("check this http://localhost:3000/lab/go now"), 3500);
   ok("phone app share: shared link auto-unmasked", await waitFor(t, `document.body.innerText.includes("Two-faced page")`, 30000), await text(t, "h1"));
+  await go(t, BASE + "/hurdle", 3000);
+  ok("/hurdle redirects to the inline section", (await ev(t, "location.pathname + location.hash")) === "/#hurdle", await ev(t, "location.href"));
   await go(t, BASE + "/check", 3500);
   ok("check page renders the checker", await ev(t, `!!document.querySelector("textarea")`));
 
@@ -178,14 +180,14 @@ try {
   ok("ext: warning says it was a redirect", (await text(a, "#reasons")).includes("redirect"), await text(a, "#reasons"));
 
   // C4. Safe sites are untouched
-  await go(a, BASE + "/hurdle", 2500);
+  await go(a, BASE + "/learn", 2500);
   ok("ext: safe site not blocked", (await urlOf(a)).startsWith(BASE), await urlOf(a));
 
   // C5. Popup tools (opened as a tab)
   const pop = await open(`chrome-extension://${ext}/popup.html`);
   await sleep(2500);
   errors.set(pop.sessionId, []);
-  ok("popup: feed loaded", /\d/.test(await text(pop, "#stat-feed")), await text(pop, "#stat-feed"));
+  ok("popup: feed count shown (or Offline when the network blocks it)", /\d|Offline/.test(await text(pop, "#stat-feed")) || await waitFor(pop, `/\d|Offline/.test(document.querySelector("#stat-feed").textContent)`, 20000), await text(pop, "#stat-feed"));
   ok("popup: block counter > 0", Number((await text(pop, "#stat-blocked")).replace(/\D/g, "")) > 0, await text(pop, "#stat-blocked"));
   await shot(pop, "ext_popup_home.png");
   await click(pop, `document.querySelector('[data-open="link"]')`);

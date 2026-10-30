@@ -51,7 +51,7 @@ export function ShareInbox() {
           <button onClick={fromClipboard} className="btn-primary mt-8 w-full rounded-2xl px-5 py-4 text-lg">Check what I copied</button>
           {clipErr && <p className="mt-3 text-red" role="alert">{clipErr}</p>}
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            {[["/hurdle#qr", "Scan a QR"], ["/phishing", "Check a link"], ["/check", "Check a message"]].map(([h, t]) => (
+            {[["/#qr", "Scan a QR"], ["/phishing", "Check a link"], ["/check", "Check a message"]].map(([h, t]) => (
               <Link key={h} href={h} className="btn-ghost rounded-2xl px-4 py-3 text-center">{t}</Link>
             ))}
           </div>
