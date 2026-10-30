@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dangerous site blocked · TrustLens</title>
+  <link rel="icon" href="icons/48.png">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Caveat:wght@600&display=swap">
+  <link rel="stylesheet" href="warning.css">
+</head>
+<body>
+  <main class="wrap">
+    <div class="shield" aria-hidden="true">
+      <svg viewBox="0 0 64 64"><path d="M32 4 8 13v17c0 15 10 26 24 30 14-4 24-15 24-30V13L32 4Z"/><path class="x" d="m24 24 16 16m0-16L24 40"/></svg>
+    </div>
+    <p class="brand">Trust<span>Lens</span> stopped this page</p>
+    <h1>This site looks <em>dangerous.</em></h1>
+    <p class="lead">It may try to steal your passwords, OTPs or money. We stopped it before it loaded.</p>
+
+    <div class="addr"><span>Blocked address</span><code id="url">…</code></div>
+
+    <section class="why" aria-labelledby="why-h">
+      <h2 id="why-h">Why we stopped it</h2>
+      <ul id="reasons"></ul>
+    </section>
+
+    <div class="actions">
+      <button class="primary" id="back">Go back to safety</button>
+    </div>
+    <details class="risk">
+      <summary>I understand the risk</summary>
+      <p>Only continue if you are sure this site is genuine. Never enter an OTP, PIN or password here.</p>
+      <button class="ghost" id="proceed">Open the site anyway</button>
+    </details>
+    <p class="help">Lost money? Call <b>1930</b> or report at <b>cybercrime.gov.in</b></p>
+  </main>
+  <script src="warning.js"></script>
+</body>
+</html>
