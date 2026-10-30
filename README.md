@@ -14,7 +14,7 @@
 | Digital signature verification | Sign at the source; any edit fails verification |
 | Browser extension | Right-click and popup checks on every site, no separate app |
 
-Inputs: pasted messages, screenshots (OCR on the device), call recordings and voice notes (speech-to-text), links and files.
+Inputs:pasted messages, screenshots (OCR on the device), call recordings and voice notes (speech-to-text), links and files.
 
 ## Run locally
 
