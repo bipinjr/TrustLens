@@ -604,3 +604,10 @@ body { background: #050708; }
 /* Nav "Protect" dropdown */
 .nav-menu { opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .2s, transform .3s cubic-bezier(.2, .8, .2, 1), visibility .2s; }
 .nav-menu.is-open { opacity: 1; visibility: visible; transform: none; }
+
+/* A hint's "show me" lands on its part of the report with a brief mint pulse */
+.tl-focus { border-radius: 1rem; transition: box-shadow .4s; }
+@media (prefers-reduced-motion: no-preference) {
+  .tl-focus.is-focus { animation: tl-focus 2.2s ease-out; }
+  @keyframes tl-focus { 0%, 40% { box-shadow: 0 0 0 2px rgb(94 234 212 / .9), 0 0 40px -6px rgb(94 234 212 / .6); } 100% { box-shadow: 0 0 0 2px rgb(94 234 212 / 0); } }
+}

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { ProtectTabs } from "./ProtectTabs";
 import type { CSSProperties, ReactNode } from "react";
 
 export const FEATURES = [
@@ -16,14 +16,7 @@ export function FeaturePage({ n, fig, title, lead, cia, ciaNote, tool, steps, no
     <main className="relative isolate overflow-hidden">
       <div className="hero-wash" aria-hidden />
       <section className="relative mx-auto max-w-7xl px-4 pb-10 pt-14 sm:px-6 sm:pt-20">
-        <nav aria-label="Features" className="mb-12 flex flex-wrap gap-2">
-          {FEATURES.map((f) => (
-            <Link key={f.href} href={f.href} aria-current={f.href === current ? "page" : undefined}
-              className={`rounded-full border px-3.5 py-1.5 text-sm transition ${f.href === current ? "border-teal/60 bg-teal/10 text-teal" : "border-white/10 text-ink-soft hover:border-white/30 hover:text-ink"}`}>
-              {f.label}
-            </Link>
-          ))}
-        </nav>
+        <ProtectTabs current={current} className="mb-12" />
         <div className="grid gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
           <div>
             <h1 className="blur-in text-6xl sm:text-7xl lg:text-[5.6rem]">{title}</h1>

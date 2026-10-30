@@ -4,7 +4,7 @@ let fails = 0;
 const ok = (name, cond, extra = "") => { console.log(`${cond ? "PASS" : "FAIL"}  ${name}${extra ? `  (${extra})` : ""}`); if (!cond) fails++; };
 const post = async (path, body) => { const r = await fetch(BASE + path, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }); return { status: r.status, j: await r.json().catch(() => ({})) }; };
 
-for (const p of ["/", "/check", "/phishing", "/malware", "/signature", "/extension", "/radar", "/learn", "/research", "/icon.svg", "/vendor/jsQR.js", "/share", "/sw.js", "/icons/icon-512.png", "/downloads/trustlens-chrome.zip", "/downloads/trustlens-firefox.zip"]) {
+for (const p of ["/", "/unmask", "/check", "/phishing", "/malware", "/signature", "/extension", "/radar", "/learn", "/research", "/icon.svg", "/vendor/jsQR.js", "/share", "/sw.js", "/icons/icon-512.png", "/downloads/trustlens-chrome.zip", "/downloads/trustlens-firefox.zip"]) {
   const r = await fetch(BASE + p);
   ok(`GET ${p}`, r.status === 200, String(r.status));
 }

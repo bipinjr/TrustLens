@@ -57,7 +57,7 @@ try {
   await send("Browser.setDownloadBehavior", { behavior: "allow", downloadPath: DL });
 
   /* ---------- A. Every page, desktop + phone: loads, no JS errors, no sideways scroll ---------- */
-  const pages = ["/", "/share", "/check", "/phishing", "/malware", "/signature", "/extension", "/radar", "/learn", "/research"];
+  const pages = ["/", "/unmask", "/share", "/check", "/phishing", "/malware", "/signature", "/extension", "/radar", "/learn", "/research"];
   const t = await open("about:blank");
   for (const mobile of [false, true]) {
     await viewport(t, mobile);
@@ -117,26 +117,32 @@ try {
     ok("signature: edited copy = tampered", await waitFor(t, `document.querySelector("[role=status]")?.innerText.includes("Don't trust this")`), await text(t, "[role=status]"));
   }
 
-  await go(t, BASE + "/#unmask", 3500);
+  await go(t, BASE + "/unmask", 3500);
   await click(t, byText("button", "demo: 3 hops"));
   ok("hurdle: demo lab -> two-faced page", await waitFor(t, `document.querySelector("[role=status]")?.innerText.includes("Two-faced page")`, 30000), await text(t, "[role=status]"));
   await shot(t, "tool_hurdle_unmask.png");
   const qrInput = "#qr input[type=file]";
   for (const [file, want] of [["qr-upi-refund-scam.png", "QR payment scam"], ["qr-upi-refund-scam-small.png", "QR payment scam"], ["qr-shop-upi.png", "This QR takes money"], ["qr-link-short.png", "QR opens"]]) {
-    await go(t, BASE + "/#qr", 3500);
+    await go(t, BASE + "/unmask#qr", 3500);
     await setFiles(t, qrInput, [`${DEMO}/${file}`]);
     ok(`hurdle QR: ${file}`, await waitFor(t, `document.querySelector("#qr")?.innerText.includes(${JSON.stringify(want)})`, 15000), (await text(t, "#qr")).slice(-120));
   }
   await shot(t, "tool_hurdle_qr.png");
-  await go(t, BASE + "/#qr", 3000);
+  await go(t, BASE + "/unmask#qr", 3000);
   await click(t, byText("button", "Try a scam QR"));
   ok("hurdle QR: sample button", await waitFor(t, `document.querySelector("#qr")?.innerText.includes("QR payment scam")`), "");
 
   await go(t, BASE + "/share?text=" + encodeURIComponent(`check this ${BASE}/lab/go now`), 3500);
   ok("phone app share: shared link auto-unmasked", await waitFor(t, `document.body.innerText.includes("Two-faced page")`, 30000), await text(t, "h1"));
+  await go(t, BASE + "/unmask", 3500);
+  await click(t, byText("button", "Show the cloaking test"));
+  ok("unmask: hint 2 shows the cloaking test in action", await waitFor(t, `document.getElementById("tl-cloak")?.classList.contains("is-focus")`, 30000), "");
+  await click(t, byText("button", "Show a QR payment scam"));
+  ok("unmask: hint 3 opens the QR tab with a scam QR", await waitFor(t, `document.querySelector("#qr")?.innerText.includes("QR payment scam")`, 10000), "");
+  ok("protect tabs on unmask list all five", await ev(t, `["Unmask","Phishing","Malware","Verify","Browser extension"].every((w) => document.querySelector("nav[aria-label=Protect]")?.innerText.includes(w))`));
   await go(t, BASE + "/radar", 4000);
   ok("radar renders data (live or snapshot)", await waitFor(t, `/Reports in the last 14 days/.test(document.body.innerText)`, 15000), await text(t, "main"));
-  ok("nav has Unmask, Protect, Scam Radar, Learn, Research", await ev(t, `["Unmask","Protect","Scam Radar","Learn","Research"].every((w) => document.querySelector("nav[aria-label=Main]").innerText.includes(w))`));
+  ok("nav has Protect, Scam Radar, Learn, Research", await ev(t, `["Protect","Scam Radar","Learn","Research"].every((w) => document.querySelector("nav[aria-label=Main]").innerText.includes(w))`));
   await go(t, BASE + "/check", 3500);
   ok("check page renders the checker", await ev(t, `!!document.querySelector("textarea")`));
 

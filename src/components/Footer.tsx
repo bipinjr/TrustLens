@@ -15,19 +15,26 @@ export function Footer() {
             choose to report them, and reports are anonymised.
           </p>
         </div>
-        <div>
-          <p className="font-semibold text-white">Product</p>
-          <ul className="mt-3 space-y-2 text-ink-soft">
-            <li><Link className="hover:text-white" href="/check">Check a message</Link></li>
-            <li><Link className="hover:text-white" href="/#unmask">Unmask: redirects, cloaking & QR</Link></li>
-            <li><Link className="hover:text-white" href="/phishing">Phishing check</Link></li>
-            <li><Link className="hover:text-white" href="/malware">Malware check</Link></li>
-            <li><Link className="hover:text-white" href="/signature">Verify a document</Link></li>
-            <li><Link className="hover:text-white" href="/extension">Browser extension</Link></li>
-            <li><Link className="hover:text-white" href="/radar">Scam Radar</Link></li>
-            <li><Link className="hover:text-white" href="/learn">Learn &amp; practise</Link></li>
-            <li><Link className="hover:text-white" href="/research">Research &amp; accuracy</Link></li>
-          </ul>
+        <div className="grid grid-cols-2 gap-8">
+          <div>
+            <p className="font-semibold text-white">Protect</p>
+            <ul className="mt-3 space-y-2 text-ink-soft">
+              <li><Link className="hover:text-white" href="/unmask">Unmask</Link></li>
+              <li><Link className="hover:text-white" href="/phishing">Phishing</Link></li>
+              <li><Link className="hover:text-white" href="/malware">Malware</Link></li>
+              <li><Link className="hover:text-white" href="/signature">Verify</Link></li>
+              <li><Link className="hover:text-white" href="/extension">Browser extension</Link></li>
+            </ul>
+          </div>
+          <div>
+            <p className="font-semibold text-white">Learn</p>
+            <ul className="mt-3 space-y-2 text-ink-soft">
+              <li><Link className="hover:text-white" href="/check">Check a message</Link></li>
+              <li><Link className="hover:text-white" href="/radar">Scam Radar</Link></li>
+              <li><Link className="hover:text-white" href="/learn">Learn &amp; practise</Link></li>
+              <li><Link className="hover:text-white" href="/research">Research</Link></li>
+            </ul>
+          </div>
         </div>
         <div>
           <p className="font-semibold text-white">Lost money to a scam?</p>

@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { CountUp, DecodeText, SpotlightGroup } from "@/components/fx";
 import { XrayHero } from "@/components/XrayHero";
-import { HurdleSection } from "@/components/HurdleSection";
 import { WordReveal } from "@/components/WordReveal";
 import { Dissection } from "@/components/Dissection";
 import { Ticker } from "@/components/Ticker";
@@ -11,7 +10,7 @@ import { BENCHMARK } from "@/lib/benchmark";
 
 const FEATURES = [
   {
-    href: "/#unmask", tag: "Unmask", span: "md:col-span-2",
+    href: "/unmask", tag: "Unmask", span: "md:col-span-2",
     title: "Redirects, cloaking and QR codes",
     body: "We walk every redirect hop, visit the page as a scanner and as a person to catch two-faced pages, and decode UPI QR codes that take money.",
     art: (
@@ -72,7 +71,7 @@ export default function Home() {
         </p>
         <div className="mt-9 flex flex-wrap gap-3">
           <Link href="/check" className="aurora btn-primary rounded-xl px-6 py-3.5 text-lg">Check something now</Link>
-          <Link href="/#unmask" className="btn-ghost rounded-xl px-6 py-3.5 text-lg">Unmask a link</Link>
+          <Link href="/unmask" className="btn-ghost rounded-xl px-6 py-3.5 text-lg">Unmask a link</Link>
         </div>
         <dl className="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm text-ink-soft">
           <div><dt className="sr-only">Detection</dt><dd><b className="text-white">{BENCHMARK.detection}</b> of unseen scams caught</dd></div>
@@ -107,8 +106,6 @@ export default function Home() {
           Source: <a className="underline underline-offset-4 hover:text-white" href={CITATIONS.mha.url} target="_blank" rel="noreferrer">{CITATIONS.mha.label}</a>
         </p>
       </section>
-
-      <HurdleSection />
 
       {/* Features */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6">

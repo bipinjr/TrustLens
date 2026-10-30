@@ -49,7 +49,7 @@ export function UnmaskReportView({ r }: { r: UnmaskReport }) {
         </div>
       </div>
 
-      <div>
+      <div id="tl-chain" className="tl-focus">
         <p className="fig mb-3">Redirect chain</p>
         <ol className="relative space-y-2 border-l border-dashed border-white/15 pl-6">
           {r.hops.map((h, i) => {
@@ -72,7 +72,7 @@ export function UnmaskReportView({ r }: { r: UnmaskReport }) {
       </div>
 
       {r.cloak && (
-        <div>
+        <div id="tl-cloak" className="tl-focus">
           <p className="fig mb-3">Cloaking test: same link, two visitors</p>
           <div className="grid gap-3 sm:grid-cols-2">
             <ViewCard who="What a security scanner sees" v={r.cloak.bot} odd={false} />
@@ -102,12 +102,25 @@ export function UnmaskReportView({ r }: { r: UnmaskReport }) {
 
 const SAMPLES = ["http://github.com", "http://google.com", "sbi-kyc-update.top/verify"];
 
-export function Unmasker({ initial, autoRun = false }: { initial?: string; autoRun?: boolean }) {
+export type DemoTrigger = { key: number; focus: "tl-chain" | "tl-cloak" };
+
+export function Unmasker({ initial, autoRun = false, demo }: { initial?: string; autoRun?: boolean; demo?: DemoTrigger | null }) {
   const [url, setUrl] = useState(initial || "");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [r, setR] = useState<UnmaskReport | null>(null);
   useEffect(() => { if (autoRun && initial) run(initial); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // A hint asked to see itself in action: run the demo lab, then bring its part of the report into view.
+  useEffect(() => {
+    if (!demo) return;
+    const u = `${location.origin}/lab/go`;
+    setUrl(u);
+    run(u).then(() => setTimeout(() => {
+      const el = document.getElementById(demo.focus);
+      el?.scrollIntoView({ behavior: "smooth", block: "center" });
+      el?.classList.remove("is-focus"); void el?.offsetWidth; el?.classList.add("is-focus");
+    }, 450));
+  }, [demo?.key]); // eslint-disable-line react-hooks/exhaustive-deps
   async function run(u = url) {
     if (!u.trim()) return setErr("Paste a link first.");
     setBusy(true); setErr(""); setR(null);
@@ -135,6 +148,7 @@ export function Unmasker({ initial, autoRun = false }: { initial?: string; autoR
 }
 
 /* ---------- QR scanner ---------- */
+const SCAM_QR = "upi://pay?pa=9876543210@ybl&pn=OLX%20Refund%20Desk&am=4999&tn=Receive%20your%20refund&cu=INR";
 type JsQR = (d: Uint8ClampedArray, w: number, h: number, o?: { inversionAttempts?: string }) => { data: string } | null;
 declare global { interface Window { jsQR?: JsQR; BarcodeDetector?: new (o: { formats: string[] }) => { detect: (s: CanvasImageSource) => Promise<{ rawValue: string }[]> } } }
 
@@ -187,7 +201,7 @@ function QrResult({ raw }: { raw: string }) {
   );
 }
 
-export function QrScanner({ initialFile }: { initialFile?: File | null }) {
+export function QrScanner({ initialFile, sampleKey }: { initialFile?: File | null; sampleKey?: number }) {
   const video = useRef<HTMLVideoElement>(null);
   const stream = useRef<MediaStream | null>(null);
   const [ready, setReady] = useState(false);
@@ -200,6 +214,7 @@ export function QrScanner({ initialFile }: { initialFile?: File | null }) {
   useEffect(() => () => stop(), [stop]);
   useEffect(() => { if (window.jsQR) setReady(true); }, []);
   useEffect(() => { if (ready && initialFile) fromFile(initialFile); }, [ready, initialFile]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (sampleKey) setRaw(SCAM_QR); }, [sampleKey]);
 
   async function camera() {
     setErr(""); setRaw("");
@@ -253,7 +268,7 @@ export function QrScanner({ initialFile }: { initialFile?: File | null }) {
       )}
       <div className="mt-4 grid grid-cols-2 gap-3">
         <button onClick={camera} disabled={!ready || live} className="btn-primary rounded-2xl px-4 py-3 disabled:opacity-50">{ready ? "Scan with camera" : "Loading scanner…"}</button>
-        <button onClick={() => setRaw("upi://pay?pa=9876543210@ybl&pn=OLX%20Refund%20Desk&am=4999&tn=Receive%20your%20refund&cu=INR")} className="btn-ghost rounded-2xl px-4 py-3">Try a scam QR</button>
+        <button onClick={() => setRaw(SCAM_QR)} className="btn-ghost rounded-2xl px-4 py-3">Try a scam QR</button>
       </div>
       {err && <p className="mt-4 text-red" role="alert">{err}</p>}
       {raw && <QrResult raw={raw} />}
