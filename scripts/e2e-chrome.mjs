@@ -57,7 +57,7 @@ try {
   await send("Browser.setDownloadBehavior", { behavior: "allow", downloadPath: DL });
 
   /* ---------- A. Every page, desktop + phone: loads, no JS errors, no sideways scroll ---------- */
-  const pages = ["/", "/hurdle", "/check", "/phishing", "/malware", "/signature", "/extension", "/radar", "/learn", "/research"];
+  const pages = ["/", "/share", "/hurdle", "/check", "/phishing", "/malware", "/signature", "/extension", "/radar", "/learn", "/research"];
   const t = await open("about:blank");
   for (const mobile of [false, true]) {
     await viewport(t, mobile);
@@ -132,6 +132,8 @@ try {
   await click(t, byText("button", "Try a scam QR"));
   ok("hurdle QR: sample button", await waitFor(t, `document.querySelector("#qr")?.innerText.includes("QR payment scam")`), "");
 
+  await go(t, BASE + "/share?text=" + encodeURIComponent("check this http://localhost:3000/lab/go now"), 3500);
+  ok("phone app share: shared link auto-unmasked", await waitFor(t, `document.body.innerText.includes("Two-faced page")`, 30000), await text(t, "h1"));
   await go(t, BASE + "/check", 3500);
   ok("check page renders the checker", await ev(t, `!!document.querySelector("textarea")`));
 

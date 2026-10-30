@@ -45,7 +45,7 @@ export function UnmaskReportView({ r }: { r: UnmaskReport }) {
           <p className={`blur-in font-display text-4xl leading-none ${TONE[tone]}`}>
             {r.cloak?.cloaked ? "Two-faced page." : r.hidden ? "It doesn't go where it says." : r.verdict === "scam" ? "Phishing." : r.verdict === "suspicious" ? "Be careful." : "Ends where it says."}
           </p>
-          <p className="mt-2 text-ink-soft">{r.hops.length - 1} hop{r.hops.length === 2 ? "" : "s"} · really lands on <b className="text-ink">{host(r.final)}</b></p>
+          <p className="mt-2 text-ink-soft">{r.hops.length - 1} hop{r.hops.length === 2 ? "" : "s"}, really lands on <b className="text-ink">{host(r.final)}</b></p>
         </div>
       </div>
 
@@ -58,9 +58,9 @@ export function UnmaskReportView({ r }: { r: UnmaskReport }) {
               <li key={i} className="rise relative" style={{ "--i": i } as CSSProperties}>
                 <span className={`absolute -left-[1.94rem] top-3 grid h-4 w-4 place-items-center rounded-full border ${bad ? "border-red bg-red/20" : i === r.hops.length - 1 ? "border-teal bg-teal/20" : "border-white/25 bg-paper"}`} aria-hidden />
                 <div className={`rounded-xl border px-3.5 py-2.5 ${bad ? "border-red/40 bg-red/[0.05]" : "hairline bg-white/[0.02]"}`}>
-                  <p className="flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-widest text-ink-soft">
+                  <p className="flex items-center gap-2 text-[0.8rem] font-medium text-ink-soft">
                     {i === 0 ? "You clicked" : i === r.hops.length - 1 ? "You land on" : `Hop ${i}`}
-                    <span className="rounded bg-white/[0.06] px-1.5 py-0.5 normal-case tracking-normal">{h.via === "start" ? "link" : h.via === "http" ? `HTTP ${r.hops[i - 1]?.status ?? ""}` : h.via === "meta" ? "meta refresh" : "JavaScript"}</span>
+                    <span className="rounded bg-white/[0.06] px-1.5 py-0.5 font-mono text-[0.7rem]">{h.via === "start" ? "link" : h.via === "http" ? `HTTP ${r.hops[i - 1]?.status ?? ""}` : h.via === "meta" ? "meta refresh" : "JavaScript"}</span>
                     {h.status ? <span className="ml-auto">{h.status}</span> : null}
                   </p>
                   <p className="mt-1 break-all font-mono text-[0.85rem] text-ink">{h.url}</p>
@@ -102,11 +102,12 @@ export function UnmaskReportView({ r }: { r: UnmaskReport }) {
 
 const SAMPLES = ["http://github.com", "http://google.com", "sbi-kyc-update.top/verify"];
 
-export function Unmasker({ initial }: { initial?: string }) {
+export function Unmasker({ initial, autoRun = false }: { initial?: string; autoRun?: boolean }) {
   const [url, setUrl] = useState(initial || "");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [r, setR] = useState<UnmaskReport | null>(null);
+  useEffect(() => { if (autoRun && initial) run(initial); }, []); // eslint-disable-line react-hooks/exhaustive-deps
   async function run(u = url) {
     if (!u.trim()) return setErr("Paste a link first.");
     setBusy(true); setErr(""); setR(null);
@@ -186,7 +187,7 @@ function QrResult({ raw }: { raw: string }) {
   );
 }
 
-export function QrScanner() {
+export function QrScanner({ initialFile }: { initialFile?: File | null }) {
   const video = useRef<HTMLVideoElement>(null);
   const stream = useRef<MediaStream | null>(null);
   const [ready, setReady] = useState(false);
@@ -198,6 +199,7 @@ export function QrScanner() {
   const stop = useCallback(() => { stream.current?.getTracks().forEach((t) => t.stop()); stream.current = null; setLive(false); }, []);
   useEffect(() => () => stop(), [stop]);
   useEffect(() => { if (window.jsQR) setReady(true); }, []);
+  useEffect(() => { if (ready && initialFile) fromFile(initialFile); }, [ready, initialFile]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function camera() {
     setErr(""); setRaw("");

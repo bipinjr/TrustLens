@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState, type CSSProperties } from "react";
+import { useMemo, useRef, useState, type CSSProperties, useEffect } from "react";
 import { LANGUAGES, type Analysis, type Tactic } from "@/lib/shared";
 import { SAMPLES } from "@/lib/samples";
 import { findMatches } from "@/lib/signals";
@@ -28,6 +28,7 @@ function Live({ text }: { text: string }) {
 export function Checker({ children }: { children?: React.ReactNode }) {
   const [mode, setMode] = useState<Mode>("text");
   const [text, setText] = useState("");
+  useEffect(() => { try { const t = sessionStorage.getItem("trustlens-prefill"); if (t) { sessionStorage.removeItem("trustlens-prefill"); setText(t); } } catch {} }, []); // shared from the phone app
   const [language, setLanguage] = useState("English");
   const [stage, setStage] = useState<Stage>("idle");
   const [error, setError] = useState("");

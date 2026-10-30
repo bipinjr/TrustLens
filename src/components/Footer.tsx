@@ -36,7 +36,7 @@ export function Footer() {
             or report at{" "}
             <a className="font-semibold text-white underline decoration-red underline-offset-4" href="https://cybercrime.gov.in" target="_blank" rel="noreferrer">cybercrime.gov.in</a>.
           </p>
-          <p className="mt-6 text-sm text-ink-soft/70">AfterHours 1.0 · Team Zenith: Bipin A, Darshan HS, Manoj Bharadwaj, Kaushal Ved</p>
+          <p className="mt-6 text-sm text-ink-soft/70">Built for AfterHours 1.0 by Team Zenith: Bipin A, Darshan HS, Manoj Bharadwaj and Kaushal Ved</p>
         </div>
       </div>
     </footer>

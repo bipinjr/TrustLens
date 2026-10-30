@@ -3,6 +3,7 @@ import { Instrument_Serif, Inter, JetBrains_Mono, Caveat } from "next/font/googl
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { MagneticButtons, CursorGlow } from "@/components/fx";
+import { RegisterSW } from "@/components/RegisterSW";
 import "./globals.css";
 
 const display = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["normal", "italic"], variable: "--font-display" });
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-dvh">
         <MagneticButtons />
         <CursorGlow />
+        <RegisterSW />
         <Nav />
         <div className="page-in">{children}</div>
         <Footer />

@@ -4,10 +4,12 @@ let fails = 0;
 const ok = (name, cond, extra = "") => { console.log(`${cond ? "PASS" : "FAIL"}  ${name}${extra ? `  (${extra})` : ""}`); if (!cond) fails++; };
 const post = async (path, body) => { const r = await fetch(BASE + path, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }); return { status: r.status, j: await r.json().catch(() => ({})) }; };
 
-for (const p of ["/", "/hurdle", "/check", "/phishing", "/malware", "/signature", "/extension", "/radar", "/learn", "/research", "/icon.svg", "/vendor/jsQR.js"]) {
+for (const p of ["/", "/hurdle", "/check", "/phishing", "/malware", "/signature", "/extension", "/radar", "/learn", "/research", "/icon.svg", "/vendor/jsQR.js", "/share", "/sw.js", "/icons/icon-512.png"]) {
   const r = await fetch(BASE + p);
   ok(`GET ${p}`, r.status === 200, String(r.status));
 }
+const man = await (await fetch(BASE + "/manifest.webmanifest")).json().catch(() => ({}));
+ok("PWA manifest has share target", man.share_target?.action === "/share-target" && man.icons?.length === 3, man.name);
 ok("GET /nope is 404", (await fetch(BASE + "/nope")).status === 404);
 
 let r = await post("/api/link-check", { url: "https://sbi-kyc-update.top/verify" });

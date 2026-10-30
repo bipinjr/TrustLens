@@ -237,3 +237,7 @@ ul.sources li.clean em { color: var(--mint); }
 .hop { padding: 2px 8px; border-radius: 99px; border: 1px solid var(--line2); font: 11px var(--mono); color: var(--soft); }
 .hop.end { border-color: currentColor; color: var(--ink); }
 .hop-arrow { color: var(--mint); font-style: normal; }
+
+/* Taste pass: labels in sentence case, body face */
+.label, .site-label, .pill, .back, .settings summary, label, .brand, .addr span, .site-verdict { text-transform: none !important; letter-spacing: 0 !important; font-family: var(--body, "Inter"), system-ui, sans-serif !important; }
+.label { font-size: 12px; font-weight: 500; }

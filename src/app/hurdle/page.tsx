@@ -52,8 +52,7 @@ export default function HurdlePage() {
     <main className="relative isolate overflow-hidden">
       <div className="hero-wash" aria-hidden />
       <section className="relative mx-auto max-w-7xl px-4 pb-8 pt-16 sm:px-6 sm:pt-24">
-        <p className="fig flex items-center gap-3"><span className="h-1.5 w-1.5 rounded-full bg-red shadow-[0_0_10px_#fb7185]" />Offline round · Hurdle brief · Team 54</p>
-        <h1 className="blur-in mt-6 max-w-5xl text-6xl sm:text-8xl">Redirects, <em>cloaking</em> &amp; QR codes.</h1>
+        <h1 className="blur-in max-w-5xl text-6xl sm:text-8xl">Redirects, <em>cloaking</em> &amp; QR codes.</h1>
         <p className="rise mt-8 max-w-2xl text-lg text-ink-soft" style={{ "--i": 2 } as CSSProperties}>
           Phishing links hide behind chains of redirects. Phishing pages show a harmless page to scanners and the fake login to real users.
           And in India, many scams arrive as QR codes that request money instead of sending it. Here is how TrustLens clears each one.
@@ -61,7 +60,7 @@ export default function HurdlePage() {
         <ol className="mt-14 grid gap-4 md:grid-cols-3">
           {HINTS.map((h, i) => (
             <li key={h.n} className="spotlight card rise relative p-6" style={{ "--i": i + 3 } as CSSProperties}>
-              <span className="fig">Hint {h.n}</span>
+              <span className="fig">Hint {Number(h.n)}</span>
               <p className="mt-3 font-pen text-2xl leading-snug text-amber">“{h.hint}”</p>
               <p className="mt-5 border-t border-dashed hairline pt-4 text-[0.95rem] text-ink-soft"><b className="text-teal">Our answer.</b> {h.answer}</p>
             </li>

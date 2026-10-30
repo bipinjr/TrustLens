@@ -19,20 +19,19 @@ export function FeaturePage({ n, fig, title, lead, cia, ciaNote, tool, steps, no
         <nav aria-label="Features" className="mb-12 flex flex-wrap gap-2">
           {FEATURES.map((f) => (
             <Link key={f.href} href={f.href} aria-current={f.href === current ? "page" : undefined}
-              className={`rounded-full border px-3.5 py-1.5 font-mono text-xs uppercase tracking-widest transition ${f.href === current ? "border-teal/60 bg-teal/10 text-teal" : "border-white/10 text-ink-soft hover:border-white/30 hover:text-ink"}`}>
-              {f.n} · {f.label}
+              className={`rounded-full border px-3.5 py-1.5 text-sm transition ${f.href === current ? "border-teal/60 bg-teal/10 text-teal" : "border-white/10 text-ink-soft hover:border-white/30 hover:text-ink"}`}>
+              {f.label}
             </Link>
           ))}
         </nav>
         <div className="grid gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
           <div>
-            <p className="fig flex items-center gap-3"><span className="h-1.5 w-1.5 rounded-full bg-teal shadow-[0_0_10px_#5eead4]" />FIG {n} — {fig}</p>
-            <h1 className="blur-in mt-6 text-6xl sm:text-7xl lg:text-[5.6rem]">{title}</h1>
+            <h1 className="blur-in text-6xl sm:text-7xl lg:text-[5.6rem]">{title}</h1>
             <p className="rise mt-6 max-w-xl text-lg text-ink-soft" style={{ "--i": 2 } as CSSProperties}>{lead}</p>
             <div className="rise mt-8 inline-flex items-center gap-4 rounded-2xl border hairline bg-white/[0.02] px-5 py-4" style={{ "--i": 3 } as CSSProperties}>
               <span className="font-display text-5xl leading-none text-teal">{cia[0]}</span>
               <span>
-                <span className="fig block">CIA triad · {cia}</span>
+                <span className="block font-semibold text-ink">Protects {cia.toLowerCase()}</span>
                 <span className="text-sm text-ink-soft">{ciaNote}</span>
               </span>
             </div>

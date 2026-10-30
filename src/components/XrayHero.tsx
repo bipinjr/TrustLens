@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
+import { HeroField } from "./HeroField";
 
 /* Two pixel-identical layers. The top "truth" layer is only visible inside the lens (CSS mask).
    Desktop: the lens follows the cursor. Touch / idle: it drifts on its own. */
@@ -31,7 +32,7 @@ function Truth() {
   return (
     <div className="xr-layer xr-truth" aria-hidden>
       <div className="xr-msg">
-        <p className="xr-from"><span className="xr-av xr-bad">?</span><span><b>+91 98XXX 41207</b><small>Not in contacts · display name faked</small></span></p>
+        <p className="xr-from"><span className="xr-av xr-bad">?</span><span><b>+91 98XXX 41207</b><small>Not in contacts, display name faked</small></span></p>
         <p className="xr-bubble">Dear customer, complete your KYC <mark>today</mark> to keep your account active. Update securely at <mark>bit.ly/k9 → t.co → sbi-kyc-update.top</mark></p>
         <p className="xr-note">3 hidden redirects</p>
       </div>
@@ -79,13 +80,14 @@ export function XrayHero({ children }: { children: ReactNode }) {
   return (
     <section className="relative isolate overflow-hidden">
       <div className="hero-wash" aria-hidden />
+      <HeroField />
       <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 pb-16 pt-14 sm:px-6 lg:grid-cols-[1fr_1.15fr] lg:pb-24 lg:pt-20">
         <div>{children}</div>
         <div ref={stage} className="xr-stage" role="img" aria-label="A friendly-looking SBI message, a refund QR poster and a recipe site. Under the TrustLens lens: a spoofed sender, a link that redirects three times to sbi-kyc-update.top, a QR that sends ₹4,999, and a cloaked fake login.">
           <Surface />
           <Truth />
           <div className="xr-lens" aria-hidden><span className="xr-lens-ring" /><span className="xr-lens-label">TrustLens</span></div>
-          <p className="xr-hint" aria-hidden>Move the lens · see what it hides</p>
+          <p className="xr-hint" aria-hidden>Move the lens to see what it hides</p>
         </div>
       </div>
     </section>

@@ -3,8 +3,10 @@ import { redact } from "./redact";
 export { redact };
 import { PRINCIPLE_IDS, type PrincipleId } from "./principles";
 
-const URL = process.env.SUPABASE_URL!;
-const KEY = process.env.SUPABASE_KEY!;
+// Tolerate copy-paste slips in hosting env settings: whitespace, wrapping quotes, trailing slash.
+const clean = (v = "") => v.trim().replace(/^["']|["']$/g, "").trim();
+const URL = clean(process.env.SUPABASE_URL).replace(/\/+$/, "");
+const KEY = clean(process.env.SUPABASE_KEY);
 const headers = { apikey: KEY, Authorization: `Bearer ${KEY}`, "content-type": "application/json" };
 
 export const CHANNELS = ["sms", "whatsapp", "email", "call", "other"] as const;

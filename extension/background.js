@@ -1,7 +1,7 @@
 // TrustLens guard: runs in the background and stops dangerous pages before they load.
 //  1. Known phishing sites (live OpenPhish feed) -> declarativeNetRequest redirect rules (blocked before any request).
 //  2. Every other top-level page -> offline look-alike checks (guard.js) -> redirect to the warning page.
-importScripts("guard.js");
+if (typeof importScripts === "function") importScripts("guard.js"); // Chrome service worker; Firefox loads guard.js via manifest scripts
 
 const FEED = "https://raw.githubusercontent.com/openphish/public_feed/refs/heads/main/feed.txt";
 const WARNING = chrome.runtime.getURL("warning.html");
@@ -44,8 +44,8 @@ async function guard(tabId, url, extra) {
   if (allow.includes(host)) return false;
   const reasons = linkReasons(url);
   if (!shouldBlock(reasons)) return false;
-  await chrome.storage.session.set({ [`why:${tabId}`]: extra ? [extra, ...reasons] : reasons });
-  chrome.tabs.update(tabId, { url: `${WARNING}?src=rules&tab=${tabId}&u=${encodeURIComponent(url)}` });
+  const why = (extra ? [{ weight: 25, ...extra }, ...reasons] : reasons).map((r) => ({ label: r.label, weight: r.weight }));
+  chrome.tabs.update(tabId, { url: `${WARNING}?src=rules&u=${encodeURIComponent(url)}&why=${encodeURIComponent(JSON.stringify(why))}` }).catch(() => {});
   return true;
 }
 chrome.webNavigation.onBeforeNavigate.addListener((d) => {
@@ -67,7 +67,15 @@ chrome.webRequest.onBeforeRedirect.addListener((d) => {
 
 // Remember which tab opened which, so "Go back" can return you to it.
 chrome.tabs.onCreated.addListener((t) => t.openerTabId && chrome.storage.session.set({ [`opener:${t.id}`]: t.openerTabId }));
-chrome.tabs.onRemoved.addListener((id) => chrome.storage.session.remove([`opener:${id}`, `safe:${id}`, `why:${id}`]));
+chrome.tabs.onRemoved.addListener((id) => chrome.storage.session.remove([`opener:${id}`, `safe:${id}`]));
+// Chrome swaps tab ids when a prerendered page is shown: carry "where you were" over to the new id.
+chrome.tabs.onReplaced.addListener(async (added, removed) => {
+  const s = await chrome.storage.session.get([`opener:${removed}`, `safe:${removed}`]);
+  const next = {};
+  if (s[`opener:${removed}`]) next[`opener:${added}`] = s[`opener:${removed}`];
+  if (s[`safe:${removed}`]) next[`safe:${added}`] = s[`safe:${removed}`];
+  if (Object.keys(next).length) chrome.storage.session.set(next);
+});
 
 async function goBack(tabId) {
   const s = await chrome.storage.session.get([`safe:${tabId}`, `opener:${tabId}`]);
@@ -100,16 +108,18 @@ chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
 
 // ---------- Context menu: check a link / text on demand ----------
 chrome.runtime.onInstalled.addListener(() => {
+  if (chrome.contextMenus) {
   chrome.contextMenus.create({ id: "tl-text", title: "Check with TrustLens", contexts: ["selection"] });
   chrome.contextMenus.create({ id: "tl-link", title: "Unmask this link with TrustLens", contexts: ["link"] });
   chrome.contextMenus.create({ id: "tl-qr", title: "Scan this QR code with TrustLens", contexts: ["image"] });
+  } // no context menus on Firefox for Android
   chrome.alarms.create("feed", { periodInMinutes: 30 });
   refreshFeed();
 });
 chrome.runtime.onStartup.addListener(refreshFeed);
 chrome.alarms.onAlarm.addListener((a) => a.name === "feed" && refreshFeed());
 
-chrome.contextMenus.onClicked.addListener(async (info) => {
+chrome.contextMenus?.onClicked.addListener(async (info) => {
   const pending = info.menuItemId === "tl-link" ? { kind: "link", value: info.linkUrl } : info.menuItemId === "tl-qr" ? { kind: "qr", value: info.srcUrl } : { kind: "text", value: info.selectionText };
   await chrome.storage.session.set({ pending });
   chrome.action.openPopup?.().catch(() => {});

@@ -22,27 +22,27 @@ const FEATURES = [
     ),
   },
   {
-    href: "/phishing", tag: "01 · Confidentiality", title: "Scam & phishing protection",
+    href: "/phishing", tag: "Confidentiality", title: "Scam & phishing protection",
     body: "Known scam patterns plus live OSINT phishing feeds, with every reason named.",
     art: <p className="font-mono text-sm"><span className="text-ink-soft">https://</span><span className="pen-mark live">paypa1</span><span className="text-ink-soft">-secure-login.com</span></p>,
   },
   {
-    href: "/malware", tag: "02 · Integrity", title: "Malware & virus check",
+    href: "/malware", tag: "Integrity", title: "Malware & virus check",
     body: "Files are fingerprinted on your device and matched against known malware. Nothing is uploaded.",
     art: <p className="break-all font-mono text-[0.7rem] text-teal">sha256 fe7726…9462 <span className="ml-1 rounded bg-red/15 px-1.5 py-0.5 text-red">known malware</span></p>,
   },
   {
-    href: "/signature", tag: "03 · Integrity", title: "Digital signatures",
+    href: "/signature", tag: "Integrity", title: "Digital signatures",
     body: "Sign a circular or certificate. Anyone can prove it is original, down to a single comma.",
     art: <span className="stamp-in inline-grid h-14 w-14 place-items-center text-center font-mono text-[0.55rem] uppercase leading-tight text-teal">Verified<br />original</span>,
   },
   {
-    href: "/extension", tag: "04 · Availability", title: "Always-on browser extension",
+    href: "/extension", tag: "Availability", title: "Always-on browser extension",
     body: "Blocks phishing before the page loads, brings you back with one tap, and needs no install on the computer.",
     art: <div className="flex items-center gap-3 text-sm" aria-hidden><span className="relative h-6 w-11 rounded-full bg-teal"><span className="absolute right-1 top-1 h-4 w-4 rounded-full bg-night" /></span><span className="text-teal">Guarding every tab</span></div>,
   },
   {
-    href: "/check", tag: "Messages · calls · screenshots", span: "md:col-span-3", title: "Decode any message",
+    href: "/check", tag: "Messages, calls and screenshots", span: "md:col-span-3", title: "Decode any message",
     body: "Paste an SMS or WhatsApp, record a call or drop a screenshot. Every trick underlined, in 9 Indian languages.",
     art: <p className="rounded-xl bg-chat px-3 py-2 text-sm leading-7 text-ink">Your parcel is held. <span className="pen-mark live">Pay ₹49 within 2 hours</span></p>,
   },
@@ -60,11 +60,10 @@ export default function Home() {
     <main>
       <div className="scroll-iris" aria-hidden />
       <XrayHero>
-        <p className="claim-stamp">Team Zenith · AfterHours 1.0</p>
-        <h1 className="mt-6 text-[3.4rem] leading-[.95] sm:text-[5.2rem] lg:text-[6.2rem]">
+        <h1 className="text-[3.4rem] leading-[.95] sm:text-[5.2rem] lg:text-[6.2rem]">
           <DecodeText text="Every scam" /><br />
           <span className="text-ink-soft"><DecodeText text="has a" delay={150} /></span>{" "}
-          <em><DecodeText text="second face." delay={300} duration={1300} /></em>
+          <em className="text-teal"><DecodeText text="second face." delay={300} duration={1300} /></em>
         </h1>
         <p className="mt-7 max-w-xl text-lg text-ink-soft sm:text-xl">
           A friendly SMS, a refund QR, a recipe site. TrustLens looks behind each one: the redirects, the cloaked login, the QR that takes money.
@@ -121,7 +120,6 @@ export default function Home() {
               <div className="mt-auto">
                 <h3 className="text-3xl text-white">{f.title}</h3>
                 <p className="mt-2 text-ink-soft">{f.body}</p>
-                <p className="mt-4 font-mono text-xs uppercase tracking-widest text-teal opacity-60 transition group-hover:opacity-100">Open <span className="inline-block transition-transform group-hover:translate-x-1">→</span></p>
               </div>
             </Link>
           ))}

@@ -60,7 +60,7 @@ function Verdict({ head, tone, title, sub, items, sources }: { head: ReactNode; 
               <li key={s.source} className="flex justify-between gap-4">
                 <span className="text-ink-soft">{s.source}</span>
                 <span className={s.status === "hit" ? "text-red" : s.status === "clean" ? "text-teal" : "text-ink-soft/60"}>
-                  {s.status === "hit" ? s.detail || "flagged" : s.status === "clean" ? "not listed" : `skipped${s.detail ? ` · ${s.detail}` : ""}`}
+                  {s.status === "hit" ? s.detail || "flagged" : s.status === "clean" ? "not listed" : `skipped${s.detail ? `: ${s.detail.toLowerCase()}` : ""}`}
                 </span>
               </li>
             ))}
@@ -220,7 +220,7 @@ export function SignVerify() {
       const key = await crypto.subtle.importKey("jwk", { ...b.publicKey, ext: true }, ALG, false, ["verify"]);
       const ok = await crypto.subtle.verify(SIGN, key, unb64(b.signature), await f.arrayBuffer());
       const kfp = await fingerprint(b.publicKey);
-      const items = [<>Signed by <b>{b.signer}</b> · {new Date(b.signedAt).toLocaleString()}</>, <>Key fingerprint <code className="font-mono text-teal">{kfp}</code></>];
+      const items = [<>Signed by <b>{b.signer}</b> on {new Date(b.signedAt).toLocaleString("en-IN")}</>, <>Key fingerprint <code className="font-mono text-teal">{kfp}</code></>];
       setRes(ok
         ? <Verdict head={<Stamp tone="good">Verified<br />original</Stamp>} tone="good" title="Original and unchanged." sub={`${f.name} is exactly what ${b.signer} signed.`} items={items} />
         : <Verdict head={<Stamp tone="bad">Tampered</Stamp>} tone="bad" title="Don't trust this." sub="The file was changed after signing, or the signature belongs to another file." items={items} />);
