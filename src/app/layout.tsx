@@ -1,15 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { Instrument_Serif, Inter, JetBrains_Mono, Caveat } from "next/font/google";
+import localFont from "next/font/local";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { MagneticButtons, CursorGlow } from "@/components/fx";
 import { RegisterSW } from "@/components/RegisterSW";
 import "./globals.css";
 
-const display = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["normal", "italic"], variable: "--font-display" });
-const body = Inter({ subsets: ["latin"], variable: "--font-body" });
-const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-code" });
-const pen = Caveat({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-pen" });
+// Fonts ship with the repo (latin subsets), so builds never depend on reaching Google Fonts.
+const display = localFont({ variable: "--font-display", display: "swap", src: [
+  { path: "./fonts/InstrumentSerif-normal.woff2", weight: "400", style: "normal" },
+  { path: "./fonts/InstrumentSerif-italic.woff2", weight: "400", style: "italic" },
+] });
+const body = localFont({ variable: "--font-body", display: "swap", src: [{ path: "./fonts/Inter-normal.woff2", weight: "100 900", style: "normal" }] });
+const mono = localFont({ variable: "--font-code", display: "swap", src: [{ path: "./fonts/JetBrainsMono-normal.woff2", weight: "100 800", style: "normal" }] });
+const pen = localFont({ variable: "--font-pen", display: "swap", src: [{ path: "./fonts/Caveat-normal.woff2", weight: "400 700", style: "normal" }] });
 
 export const metadata: Metadata = {
   title: { default: "TrustLens", template: "%s · TrustLens" },
