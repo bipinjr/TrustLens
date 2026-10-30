@@ -132,7 +132,7 @@ try {
   await click(t, byText("button", "Try a scam QR"));
   ok("hurdle QR: sample button", await waitFor(t, `document.querySelector("#qr")?.innerText.includes("QR payment scam")`), "");
 
-  await go(t, BASE + "/share?text=" + encodeURIComponent("check this http://localhost:3000/lab/go now"), 3500);
+  await go(t, BASE + "/share?text=" + encodeURIComponent(`check this ${BASE}/lab/go now`), 3500);
   ok("phone app share: shared link auto-unmasked", await waitFor(t, `document.body.innerText.includes("Two-faced page")`, 30000), await text(t, "h1"));
   await go(t, BASE + "/radar", 4000);
   ok("radar renders data (live or snapshot)", await waitFor(t, `/Reports in the last 14 days/.test(document.body.innerText)`, 15000), await text(t, "main"));
@@ -185,6 +185,10 @@ try {
   ok("ext: safe site not blocked", (await urlOf(a)).startsWith(BASE), await urlOf(a));
 
   // C5. Popup tools (opened as a tab)
+  const pop0 = await open(`chrome-extension://${ext}/popup.html`);
+  await sleep(1500);
+  await ev(pop0, `chrome.storage.local.set({ api: ${JSON.stringify(BASE)} }).then(() => true)`); // popup talks to the server under test
+  await send("Target.closeTarget", { targetId: pop0.targetId });
   const pop = await open(`chrome-extension://${ext}/popup.html`);
   await sleep(2500);
   errors.set(pop.sessionId, []);
