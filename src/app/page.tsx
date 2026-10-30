@@ -1,52 +1,11 @@
 import Link from "next/link";
-import type { CSSProperties } from "react";
-import { CountUp, DecodeText, SpotlightGroup } from "@/components/fx";
+import { CountUp, DecodeText } from "@/components/fx";
 import { XrayHero } from "@/components/XrayHero";
 import { WordReveal } from "@/components/WordReveal";
 import { Dissection } from "@/components/Dissection";
 import { Ticker } from "@/components/Ticker";
 import { CITATIONS } from "@/lib/principles";
 import { BENCHMARK } from "@/lib/benchmark";
-
-const FEATURES = [
-  {
-    href: "/unmask", tag: "Unmask", span: "md:col-span-2",
-    title: "Redirects, cloaking and QR codes",
-    body: "We walk every redirect hop, visit the page as a scanner and as a person to catch two-faced pages, and decode UPI QR codes that take money.",
-    art: (
-      <ol className="flex flex-wrap items-center gap-2 font-mono text-[0.72rem]" aria-hidden>
-        {["bit.ly/k9", "t.co/x8", "ads.click/r", "sbi-kyc-update.top"].map((h, i, a) => (
-          <li key={h} className="flex items-center gap-2"><span className={`bar-grow rounded-full border px-2.5 py-1 ${i === a.length - 1 ? "border-red/60 text-red" : "border-white/12 text-ink-soft"}`} style={{ "--i": i } as CSSProperties}>{h}</span>{i < a.length - 1 && <span className="text-teal">→</span>}</li>
-        ))}
-      </ol>
-    ),
-  },
-  {
-    href: "/phishing", tag: "Confidentiality", title: "Scam & phishing protection",
-    body: "Known scam patterns plus live OSINT phishing feeds, with every reason named.",
-    art: <p className="font-mono text-sm"><span className="text-ink-soft">https://</span><span className="pen-mark live">paypa1</span><span className="text-ink-soft">-secure-login.com</span></p>,
-  },
-  {
-    href: "/malware", tag: "Integrity", title: "Malware & virus check",
-    body: "Files are fingerprinted on your device and matched against known malware. Nothing is uploaded.",
-    art: <p className="break-all font-mono text-[0.7rem] text-teal">sha256 fe7726…9462 <span className="ml-1 rounded bg-red/15 px-1.5 py-0.5 text-red">known malware</span></p>,
-  },
-  {
-    href: "/signature", tag: "Integrity", title: "Verify documents",
-    body: "Sign a circular or certificate. Anyone can prove it is original, down to a single comma.",
-    art: <span className="stamp-in inline-grid h-14 w-14 place-items-center text-center font-mono text-[0.55rem] uppercase leading-tight text-teal">Verified<br />original</span>,
-  },
-  {
-    href: "/extension", tag: "Availability", title: "Always-on browser extension",
-    body: "Blocks phishing before the page loads, brings you back with one tap, and needs no install on the computer.",
-    art: <div className="flex items-center gap-3 text-sm" aria-hidden><span className="relative h-6 w-11 rounded-full bg-teal"><span className="absolute right-1 top-1 h-4 w-4 rounded-full bg-night" /></span><span className="text-teal">Guarding every tab</span></div>,
-  },
-  {
-    href: "/check", tag: "Messages, calls and screenshots", span: "md:col-span-3", title: "Decode any message",
-    body: "Paste an SMS or WhatsApp, record a call or drop a screenshot. Every trick underlined, in 14 Indian languages.",
-    art: <p className="rounded-xl bg-chat px-3 py-2 text-sm leading-7 text-ink">Your parcel is held. <span className="pen-mark live">Pay ₹49 within 2 hours</span></p>,
-  },
-];
 
 const STEPS = [
   { title: "Rule engine finds hard evidence", body: "Fake bank links, hidden short links, lookalike domains, OTP or PIN requests, threats and deadlines in English and Hindi. It runs instantly in your browser, while you type." },
@@ -105,25 +64,6 @@ export default function Home() {
         <p className="mt-4 text-sm text-ink-soft">
           Source: <a className="underline underline-offset-4 hover:text-white" href={CITATIONS.mha.url} target="_blank" rel="noreferrer">{CITATIONS.mha.label}</a>
         </p>
-      </section>
-
-      {/* Features */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6">
-        <h2 className="reveal max-w-3xl text-5xl sm:text-6xl">
-          One lens. <em>Every</em> way a scam reaches you.
-        </h2>
-        <SpotlightGroup className="mt-12 grid gap-4 md:grid-cols-3">
-          {FEATURES.map((f) => (
-            <Link key={f.title} href={f.href} className={`spotlight card reveal group flex flex-col gap-6 p-7 transition-transform duration-500 hover:-translate-y-1 ${f.span ?? ""}`}>
-              <p className="fig">{f.tag}</p>
-              <div className="min-h-12">{f.art}</div>
-              <div className="mt-auto">
-                <h3 className="text-3xl text-white">{f.title}</h3>
-                <p className="mt-2 text-ink-soft">{f.body}</p>
-              </div>
-            </Link>
-          ))}
-        </SpotlightGroup>
       </section>
 
       <Dissection />
